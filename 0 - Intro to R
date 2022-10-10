@@ -1,11 +1,14 @@
-# =================================================================================================
+# ================================================================================================= #always start with a preview of the content of the script
 # First scrip in R
-# Luca De Benedictis - International Economics - Luiss - Management 2021-2022
-# 
+# Luca De Benedictis - Working with international trade data in R - 2023
+# started: 2022-10-10
+# this version: 2022-10-10
+#
 # Week 1
 # =================================================================================================
 
-
+# Fist of all make a copy of this script with a symilar but different name (e.g. "Intro to R - myversion.R")
+# It is safer to work on a copy and preserve the original script to go back to it if you need to do it, eventually.
 
 # ==============================
 # Introduction to basic R syntax
@@ -13,10 +16,10 @@
 
 1 + 3				# evaluation
 
-a <- 2				# assignment
-a					# evaluation
+a <- 2				# assignment (<- is the assignment symbol)
+a				# evaluation
 
-a<-2					# spacing does not matter
+a<-2				# spacing does not matter
 a    <-    2			# spacing does not matter
 
 a <- 3				# last assignment overwrite previous ones (!)
