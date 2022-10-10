@@ -1,0 +1,336 @@
+# =================================================================================================
+# First scrip in R
+# Luca De Benedictis - International Economics - Luiss - Management 2021-2022
+# 
+# Week 1
+# =================================================================================================
+
+
+
+# ==============================
+# Introduction to basic R syntax
+# ==============================
+
+1 + 3				# evaluation
+
+a <- 2				# assignment
+a					# evaluation
+
+a<-2					# spacing does not matter
+a    <-    2			# spacing does not matter
+
+a <- 3				# last assignment overwrite previous ones (!)
+
+sqrt(a)				# use the square root function
+b <- sqrt(a)			# use the function and save the result as an object
+
+b
+
+x					# evaluate something that is not there
+
+x <- "This tutorial is so much fun!"
+x
+
+a == b				# is a equal to b? Logical answer
+a != b				# is a not equal to b? Logical answer
+
+(a == b) + (a == b)		# FALSE takes the numerical value 0
+(a != b) + (a != b)		# TRUE takes the numerical value 1
+
+# list objects in the R environment
+# (same as viewing the "Environment" panel - r-d quadrant)
+
+ls()
+
+#-------------- Getting help in R -----------------
+
+# get help with R generally
+# (same as viewing the "Help" panel in RStudio)
+help.start()			# now query the Help page
+
+# More targeted help
+?sqrt				# get specific help for a function
+??sqrt				# looking for help pertaining to sqrt
+
+# have a look at the example at the end of ?sqrt
+
+#-------------- libraries/Packages ----------------
+
+require(stats) 		# for spline
+require(graphics)
+xx <- -9:9
+plot(xx, sqrt(abs(xx)),  col = "red")
+lines(spline(xx, sqrt(abs(xx)), n=101), col = "pink")
+
+apropos("sq")			# it's on the tip of my tongue...
+
+rm(a)				# remove a single object from the Environment
+rm(list=ls())			# remove everything from the Environment
+
+
+# -------------- Vectors and matrices in R -------------
+
+# Creating vectors using the "concatenate" operator
+a <- c(1,3,5)			# create a vector by concatenated values
+a
+class(a)				# the function "class" informs on the kind of elements included in the vector 
+a[2]					# select the second element
+
+b <- c("one","three","five")	# also works with strings
+b
+class(b)
+b[2] 				# select the second element
+
+a <- c(a,a)			# can apply recursively
+a
+a <- c(a,b)			# mixing types---what happens?
+a					# all elements of the vector get converted to the same type (e.g. "character")
+
+# Sequences and replication
+a <- seq(from=1,to=5,by=1)	# a sequence from 1 to 5
+a <- seq(from=1,to=5,by=0.5)	# a sequence from 1 to 5
+b <- 1:5					# a shortcut!
+c <- c(1:5, 0.5)			# sequence and concatenation
+
+rep(1,times=5)			# a lot of ones
+rep(1:5,times=2)		# repeat sequence 1 to 5, twice
+rep(1:5,each=2)		# same as above, but element-wise
+rep(1:5,times=5:1)		# can vary the count of each element
+
+# Any, all, and which (with vectors)
+a <- 1:5				# create a vector (e.g a sequence from 1 to 5)
+a>2					# some TRUE, some FALSE
+any(a>2)				# are any elements TRUE?
+all(a>2)				# are all elements TRUE?
+which(a>2)			# which indices are TRUE?
+
+# What about asking how long the vector is?
+length(a)
+
+# ---------------------------
+# From vectors to matrices...
+# ---------------------------
+
+# create a matrix the "formal" way...
+a <- matrix(data=1:25, nrow=5, ncol=5)
+a
+a[1,2]				# select an element (specifying two dimensions)
+a[1,]				# just the first row
+a[,2]				# just the second column
+a[2:3,3:5]			# select submatrices
+a[-1,]				# nice trick: negative numbers omit cells!
+a[-2,-2]			# get rid of row two and column two
+
+# another way to create matrices (bind together column-wise)
+b <- cbind(1:5,1:5)
+b
+b <- cbind(rep(1:5,times=2))
+b
+
+# can perform with rows, too (bind together row-wise)
+d <- rbind(1:5,1:5)
+d
+cbind(b,d)			# no go: must have compatible dimensions!
+dim(b)				# what were those dimensions, anyway?
+dim(d)
+nrow(b)				# how many rows in b?
+ncol(b)				# how many columns in b?
+cbind(b,b)			# combining two matrices, column-wise
+
+t(b)				# can transpose b
+cbind(t(b),d)		# now it works
+rbind(t(b),d)		# now it works
+
+# -----------------------
+# Element-wise operations
+# -----------------------
+
+# Most arithmetic operators are applied element-wise:
+a <- 1:5			# create a vector
+a + 1				# addition
+a * 2				# multiplication
+a / 3				# division
+a - 4				# subtraction
+a ^ 5				# you get the idea...
+a + a				# also works on pairs of vectors
+a * a
+a + 1:6				# problem: need same length
+
+# Same for many other basic transformations
+log(a)				# log function
+exp(b)				# exponential function
+sqrt(a+b)				# note that we can nest statements!
+log((sqrt(a+b)+a)*b)	# more nesting
+
+a <- rbind(1:5,2:6)		# same principles apply to matrices
+b <- rbind(3:7,4:8)
+a + b
+a / b
+
+a %*% t(b)			# matrix multiplication
+
+#-------------- Logical operators ---------------------
+# (generally) work like arithmetic ones:
+a > 0				# each value greater than zero?
+a == b				# corresponding values equivalent?
+a != b				# corresponding values not equivalent?
+
+
+
+
+# --------------- Data frames ------------------
+
+# Build a data frame from scratch, containing
+# three columns of data
+d <- data.frame(income=1:5,sane=c(T,T,T,T,F),id=LETTERS[1:5])
+d
+d[1,2]				# acts a lot like a matrix!
+d[,1]*5
+d[-1,]
+d$sane				# can use dollar sign notation to extract columns
+d$sane[3]<-FALSE	# making changes
+d
+d[2,3]				# shows factors for string values
+
+# If you want to do without factors
+d <- data.frame(income=1:5,sane=c(T,T,T,T,F),name=LETTERS[1:5],stringsAsFactors=FALSE)
+
+d[2,3]
+
+d <- as.data.frame(cbind(1:5,2:6))	# can create from matrices
+d
+is.data.frame(d)	# how can we tell it's not a matrix?
+is.matrix(d)		# the truth comes out
+
+# ---------------- Finding built-in data sets --------------
+
+# Many packages have built-in data for testing
+# and educational purposes:
+
+library(pwt10)
+?pwt10.0            # get help on a data set
+data("pwt10.0")	# load the data set
+View(pwt10.0)
+
+
+library(readxl)
+pwt10 <- read_excel("pwt100-2.xlsx", sheet = "Data")
+View(pwt10)
+
+# ---------------- Elementary visualization ---------------
+
+#Let's look at the most recent year
+max(pwt10.0$year)	# which is
+pwt10.0.2019 <- subset(pwt10.0, year == 2019)
+
+pwt10.0.2019$cgdpe # Expenditure-side real GDP at current PPPs (in million 2017 USD)
+pwt10.0.2019$rgdpna # Real GDP at constant 2017 national prices (in million 2017 USD).
+pwt10.0.2019$pop	# Population (in millions).
+
+#Constructing per capita GDP ppp and at current US prices
+
+pwt10.0.2019$cgdpepc <- pwt10.0.2019$cgdpe/pwt10.0.2019$pop
+pwt10.0.2019$rgdpnapc <- pwt10.0.2019$rgdpna/pwt10.0.2019$pop
+
+# R's graphics workhorse is the "plot" command:
+options(scipen = 999)
+# options(scipen = 0) to get back
+plot(x=pwt10.0.2019$cgdpepc,y=pwt10.0.2019$rgdpnapc)
+
+# Same as above, but now on log-log scale
+plot(x=pwt10.0.2019$cgdpepc,y=pwt10.0.2019$rgdpnapc,log="xy")
+identify(x=pwt10.0.2019$cgdpepc,y=pwt10.0.2019$rgdpnapc,log="xy", labels = pwt10.0.2019$country)
+
+# Adding plot title and clean up axis labels
+plot(x=pwt10.0.2019$cgdpepc,y=pwt10.0.2019$rgdpnapc,
+	xlab="GDP per capita PPP",
+	ylab="GDP per capita current $",
+	main="PPP vs Current common currency"
+	)
+
+# Can also add text to a plot:
+
+# Step 1: set up a "blank" plot window
+plot(x=pwt10.0.2019$cgdpepc,y=pwt10.0.2019$rgdpnapc, 
+	xlab="GDP per capita PPP",
+	ylab="GDP per capita current $",
+	main="PPP vs Current common currency", 
+	type="n")
+
+# Step 2: add in text
+
+text(x=pwt10.0.2019$cgdpepc,y=pwt10.0.2019$rgdpnapc,
+	cex=0.5, col=1, labels=pwt10.0.2019$country)
+text(x=pwt10.0.2019$cgdpepc,y=pwt10.0.2019$rgdpnapc,
+	cex=0.5, col="blue", labels=pwt10.0.2019$country)
+text(x=pwt10.0.2019$cgdpepc,y=pwt10.0.2019$rgdpnapc, 
+	cex=0.005*(pwt10.0.2019$pop), labels=pwt10.0.2019$country)
+
+# Histograms and boxplots are often helpful
+hist(pwt10.0.2019$cgdpepc)
+boxplot(pwt10.0.2019$cgdpepc)
+
+	
+
+
+#Have a look at: http://www.statmethods.net/input/importingdata.html
+
+# For more information...
+?list.files
+?read.csv
+?as.matrix
+?rownames
+?colnames
+
+
+# ---------------- Plot the data on openness - Lecture 1 ---------------
+
+# Klasing and Milionis (2014) == KM
+# Penn World Tables Version 8.1 == PWT
+# Upper bound (Estavadeordal, Frantz and Taylor, 2003) == uEFT
+# Lower bound (Estavadeordal, Frantz and Taylor, 2003) == lEFT
+
+setwd("~/Università/LUISS/A.A. 2021-2022/R scripts and data")
+data <- read.csv("5centuries.csv", sep=";", header = TRUE)
+names(data)
+
+plot(data$year, data$KM, typ="l", col="orange", xlim=c(1500,2020), ylim=c(0,0.65), xlab="years", ylab="Openness")
+lines(data$year, data$PWT, typ="l", col="deepskyblue4")
+lines(data$year[!is.na(data$uFFT)], data$uFFT[!is.na(data$uFFT)], typ="l", col="darkorchid4")
+lines(data$year[!is.na(data$lEFT)], data$lEFT[!is.na(data$lEFT)], typ="l", col="darkorchid1")
+text(1870,0.35, "Klasing and Milionis (2014)", col="gray50")
+text(1600,0.10, "Estavadeordal, Frantz and Taylor (2003)", col="gray50")
+text(2000,0.65, "Penn World Tables", col="gray50")
+
+#--------------------------- To practice -------------------------------------------
+
+# (1) run the R script as it is 
+# (2) change the colours of the time series using your preferred choice among the ones described in http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
+# (3) save the plot as a pdf file (horizontal 10x15)
+# (4) explore the R package wbstat: https://cran.r-project.org/web/packages/wbstats/vignettes/Using_the_wbstats_package.html
+# (5) install the wbstats package 
+# (6) search for "gdp" and import the variables exports and imports over gdp (%): ita_openness_data <- wb_data(country = c("ITA"), indicator = c("NE.IMP.GNFS.ZS", "NE.EXP.GNFS.ZS"), start_date = 1960, end_date = 2015)
+# (7) manipulate the data (order or sort it) and produce a plot of exports and imports against time
+# (8) print the plot and send it to Costanza Giannantoni (costanza.giannantoni@uniroma1.it) and Cecilia Nardi (cecilia.nardi@uniroma1.it)  with a short comment: what is the relation between exports and imports for Italy?
+
+#-------------------------- Extra stuff --------------------------------------------
+
+# What is the distribution of marks in the International Economics (B) course if,  when passing, marks come from a truncated normal distribution?
+
+# In a normal distribution, 99.7% of values fall within 3 standard deviations of the mean. So, if you set your mean to the middle of your desired minimum value and maximum value, and set your standard deviation to 1/3 of your mean, you get (mostly) values that fall within the desired interval. Then you can just clean up the rest.
+
+students <- 90
+minVal <- 18
+maxVal <- 31
+mn <- (maxVal - minVal)/2
+# Generate numbers (mostly) from min to max
+x <- rnorm(students, mean = mn, sd = mn/3)
+x <- minVal + x
+
+# Do something about the out-of-bounds generated values
+x <- pmax(minVal, x)
+x <- pmin(maxVal, x)
+
+plot(density(x),
+	main="Empirical distribution of International Economics (B) marks",
+	xlab="Marks")
